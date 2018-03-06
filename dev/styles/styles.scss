@@ -18,11 +18,19 @@
 
 .infoPane {
     position: absolute;
-    right:15%;
+    top: 80px;
+    right:0px;
     float:right;
+    border: 1px solid black;
+    width: 400px;
     max-width:400px;
     padding:50px;
     z-index: 9999999;
     background-color: $orange;
     color: #fff;
+}
+
+.rightColumn {
+    position: relative;
+    height: 55vh;
 }

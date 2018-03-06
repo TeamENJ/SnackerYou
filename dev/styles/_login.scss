@@ -12,11 +12,43 @@
     display:block;
     float: left;
     &:hover {
-        border:1px solid $dark;
+        background:$rose;
+        color:$orange;
     }
 }
 
+.userStuff {
+    padding:25px 25px;
+}
 .signOut {
-    width: 40%;
-    float: left;
+    display:block;
+    float:right;
+    margin-right:25px;
+    margin-top:15px;
+}
+.logOut, .logIn {
+    // padding:5px 10px;
+    font-size:14px;
+    margin-bottom:5px;
+}
+.userPhoto {
+    float:right;
+    margin-bottom:20px;
+    font-family:$mainFont;
+    font-size:14px;
+    div {
+        padding-left:25%;
+    }
+}
+.userPhoto img {
+    max-width:65px;
+    border-radius:50%;
+    display:block;
+    margin-bottom:20px;
+    
+}
+.logIn {
+    // position: absolute;
+    // top:28%;
+    // right:15%;
 }

@@ -9,61 +9,77 @@ export class MapContainer extends React.Component {
         super(props);
         this.state = {
             title: '',
+            // rating:'',
             address: '',
             showingInfoWindow: false,
             selectedPlace: {},
             activeMarker: {},
-            restaurants: []
+            loggedIn: false,
+            savedRestaurants: props.userHistory
         }
         
         this.markerClick = this.markerClick.bind(this);
         this.onMapClicked = this.onMapClicked.bind(this);
         this.clickThis = this.clickThis.bind(this);
         this.deleteRestaurant = this.deleteRestaurant.bind(this);
+
     }
-    componentDidMount() {
-        const dbRef = firebase.database().ref();
 
-        dbRef.on('value', (snapshot) => {
-            const restData = snapshot.val();
-            const restArray = [];
-
-            for (let rest in restData) {
-                restData[rest].key = rest;
-                restArray.push(restData[rest]);
-            }
-
-            this.setState({
-                restaurants: restArray
-            });
-        });
+ 
+    componentWillReceiveProps(props) {
+        // console.log(this.props.userHistory)
+        console.log(props)
+        let restaurantHistory = props.userHistory
+        this.setState({
+            savedRestaurants: restaurantHistory
+        })
     }
     markerClick(props, marker) {
-        console.log(props);
+
         this.setState({
             showingInfoWindow: true,
             title: props.title,
             activeMarker: marker,
-            address: props.address
+
+            address: props.address,
+
+           
+
+
         })
     }
     clickThis(){
+
+        
         const userSave = {
             restaurant: this.state.title,
-            address: this.state.address
+            address: this.state.address,
+
+        
         }
-        const newRest = Array.from(this.state.restaurants);
 
-        newRest.push(userSave);
-
-        const dbRef = firebase.database().ref('/restaurants/users');
-        dbRef.push(userSave);
-
-        this.setState({
-            restaurants: newRest
-        })    
-
+        const dbRef = firebase.database().ref('/restaurants');
+        dbRef.push(userSave);     
     }
+    componentDidMount() {
+        const dbRef = firebase.database().ref('/restaurants');
+        dbRef.on('value', (snapshot)=>{
+            let items = snapshot.val();
+            let newState = [];
+            for (let item in items) {
+                newState.push({
+                    id: item,
+                    title: items[item].title,
+                    address: items[item].address
+                });
+            }
+            this.setState({
+                places:newState
+            });
+            console.log(items);
+        });
+    }
+
     onMapClicked(props) {
         if (this.state.showingInfoWindow) {
             this.setState({
@@ -72,8 +88,10 @@ export class MapContainer extends React.Component {
             })
         }
     }
-    deleteRestaurant(leave) {
-        const dbRef = firebase.database().ref();
+    deleteRestaurant(key) {
+        // e.preventDefault();
+        console.log(key)
+        const dbRef = firebase.database().ref(`restaurants/${key}`)
         dbRef.remove();
     }
     render(props) {
@@ -81,15 +99,32 @@ export class MapContainer extends React.Component {
             width:'70%',
             height:'80%'
         }
-        // centerAroundCurrentLocation={true} 
-        return (<div>
-            {/* <div className="infoPane">
-              <h5>{this.state.title}</h5>
-              <p>{this.state.address}</p>
-              <span>{this.state.rating}</span>
-              <button className="save" onClick={this.clickThis}>Save Restaurant</button>
-                <a href="#" onClick={this.deleteRestaurant} ><i className="fas fa-times"></i></a>
-            </div> */}
+        return (<div className="rightColumn">
+            <div className="infoPane">
+                    <button onClick={this.clickThis} className="save">Save Restaurant</button>
+
+                {this.state.savedRestaurants.map((restaurant) => {
+                    console.log(restaurant)
+                    return(
+                    <span key={restaurant.key}>
+                        <h5>{restaurant.restaurant}</h5>
+                        <p>{restaurant.address}</p>
+                        <button value={restaurant.key} onClick={() => this.deleteRestaurant(restaurant.key)}><i class="fas fa-times"></i></button>
+                    </span>
+                        
+                    )
+                    
+                })}
+
+
+            </div>
+            <section className="saved">
+                <div className="wrapper">
+                
+
+                </div>
+            </section>
+            
             <Map google={this.props.google} zoom={13} onClick={this.onMapClicked} center={this.props.coords} style={style}>
               {Object.values(this.props.locations).map(
                 (location, i) => {

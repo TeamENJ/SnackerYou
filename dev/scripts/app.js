@@ -25,17 +25,21 @@ class App extends React.Component {
             userText: '',
             restaurants: [],
             coordinates: {},
-            loggedIn: false
+            username: '',
+            user: null,
+            savedRestaurants: []
         }
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.submit = this.submit.bind(this);
         this.getCoords = this.getCoords.bind(this);
+        this.getSavedRestaurants = this.getSavedRestaurants.bind(this);
+        // this.getSavedRestaurants();        
+
     }
 
-    signIn(e) {
-        const provider = new firebase.auth.GoogleAuthProvider();
+    signIn() {
 
         auth.signInWithPopup(provider)
         .then((result) => {
@@ -43,6 +47,7 @@ class App extends React.Component {
             this.setState ({
                 user
             })
+            console.log(user)
         })
     }
     signOut() {
@@ -56,6 +61,32 @@ class App extends React.Component {
     handleChange(e) {
         this.setState({
             [e.target.id]: e.target.value
+        })
+    }
+    getSavedRestaurants() {
+        const dbRef = firebase.database().ref('/restaurants');
+
+        const restaurantList = [];
+
+        // dbref.on('value', (snapshot) => {
+        //     const data = snapshot.val();
+        //     const state = [];
+        //     for (let key in data) {
+        //         data[key].key = key;
+        //         state.push(data[key]);
+        //     }
+        
+        dbRef.on('value', (response) => {
+            const data = response.val();
+            const state = [];
+            for (let key in data) {
+                data[key].key = key;
+                state.push(data[key]);
+            }
+
+            this.setState({
+                savedRestaurants: state
+            });
         })
     }
     componentDidMount () {
@@ -95,7 +126,7 @@ class App extends React.Component {
                                 address: eatingPlace.restaurant.location.address,
                                 latitude: eatingPlace.restaurant.location.latitude,
                                 longitude: eatingPlace.restaurant.location.longitude,
-                                rating: eatingPlace.restaurant.user_rating.aggregate_rating
+                                // rating: eatingPlace.restaurant.user_rating.aggregate_rating
                             };
                         });
 
@@ -126,26 +157,50 @@ class App extends React.Component {
               <img src="./public/images/fullLogo.png" />
             </div>
             <div className="signOut">
-              {this.state.user ? <button className="authButton" onClick={this.signOut}>
-                  Sign Out
-                </button> : <button className="authButton" onClick={this.signIn}>
-                  Sign in
-                </button>}
-            </div>
-            {this.state.user ? <div>
-                <div className="userStuff">
-                  <form onSubmit={this.submit} className="wrapper">
+              {this.state.user ? <div className="clearfix">
+                  <div className="userStuff">
+                    <div className="userPhoto">
+                        <div>
+                            <img src={this.state.user.photoURL} alt="" />
+                        </div>
+                      <span>Welcome, {this.state.user.displayName}!</span>
+                    </div>
+                    {/* <form onSubmit={this.submit} className="wrapper">
                     <label htmlFor="userSearch">City or Address:</label>
                     <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
                     <input type="submit" value="Food Me!" />
                   </form>
 
                   <div id="map" className="map">
+
                     <MapContainer locations={this.state.restaurants} coords={this.state.coordinates} />
+                  </div>     */}
+                  </div>
+                </div> : <div className="wrapper">
+                </div>}
+              {this.state.user ? <button className="authButton logOut" onClick={this.signOut}>
+                  Sign Out
+                </button> : 
+                <button className="authButton logIn" onClick={this.signIn}>
+                  Sign in
+                </button>}
+            </div>
+
+            {this.state.user ? <div className="search-thing">
+                <form onSubmit={this.submit} className="wrapper">
+                  <label htmlFor="userSearch">City or Address:</label>
+                  <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
+                  <input type="submit" value="Food Me!" />
+                </form>
+
+                <div id="map" className="map">
+                  
+
+                    <MapContainer locations={this.state.restaurants} coords={this.state.coordinates} userHistory={this.state.savedRestaurants} />
                   </div>    
+
                 </div>
-              </div> : <div className="wrapper">
-                <p>you must be logged in</p>
+               : <div>
               </div>}
           </div>;
     }
