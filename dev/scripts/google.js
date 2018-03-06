@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
+import Sidebar from './sidebar'
 
 
 export class MapContainer extends React.Component {
@@ -9,26 +10,33 @@ export class MapContainer extends React.Component {
         this.state = {
             title: '',
             address: '',
-            rating:'',
             showingInfoWindow: false,
             selectedPlace: {},
-            activeMarker: {}
+            activeMarker: {},
+            restaurants: []
         }
         
         this.markerClick = this.markerClick.bind(this);
         this.onMapClicked = this.onMapClicked.bind(this);
         this.clickThis = this.clickThis.bind(this);
+        this.deleteRestaurant = this.deleteRestaurant.bind(this);
     }
     componentDidMount() {
-        firebase.auth().onAuthStateChanged((res) => {
-            if(res) {
-                this.setState({
-                    loggedIn: true
-                })
-            } else {
-                loggedIn: false
+        const dbRef = firebase.database().ref();
+
+        dbRef.on('value', (snapshot) => {
+            const restData = snapshot.val();
+            const restArray = [];
+
+            for (let rest in restData) {
+                restData[rest].key = rest;
+                restArray.push(restData[rest]);
             }
-        })
+
+            this.setState({
+                restaurants: restArray
+            });
+        });
     }
     markerClick(props, marker) {
         console.log(props);
@@ -36,21 +44,25 @@ export class MapContainer extends React.Component {
             showingInfoWindow: true,
             title: props.title,
             activeMarker: marker,
-            address: props.address,
-            rating: props.rating
+            address: props.address
         })
     }
     clickThis(){
-        
         const userSave = {
             restaurant: this.state.title,
-            address: this.state.address,
-            rating: this.state.rating
+            address: this.state.address
         }
-        // console.log(userSave);
+        const newRest = Array.from(this.state.restaurants);
 
-        const dbRef = firebase.database().ref('/restaurants');
+        newRest.push(userSave);
+
+        const dbRef = firebase.database().ref('/restaurants/users');
         dbRef.push(userSave);
+
+        this.setState({
+            restaurants: newRest
+        })    
+
     }
     onMapClicked(props) {
         if (this.state.showingInfoWindow) {
@@ -60,21 +72,24 @@ export class MapContainer extends React.Component {
             })
         }
     }
-
+    deleteRestaurant(leave) {
+        const dbRef = firebase.database().ref();
+        dbRef.remove();
+    }
     render(props) {
         const style = {
             width:'70%',
             height:'80%'
         }
         // centerAroundCurrentLocation={true} 
-    return (
-        <div>
-            <div className="infoPane">
+        return (<div>
+            {/* <div className="infoPane">
               <h5>{this.state.title}</h5>
               <p>{this.state.address}</p>
               <span>{this.state.rating}</span>
-              <button onClick={this.clickThis}>CLICK CLICK</button>
-            </div>
+              <button className="save" onClick={this.clickThis}>Save Restaurant</button>
+                <a href="#" onClick={this.deleteRestaurant} ><i className="fas fa-times"></i></a>
+            </div> */}
             <Map google={this.props.google} zoom={13} onClick={this.onMapClicked} center={this.props.coords} style={style}>
               {Object.values(this.props.locations).map(
                 (location, i) => {
@@ -103,8 +118,16 @@ export class MapContainer extends React.Component {
                 </div>
               </InfoWindow>
             </Map>
+            
+            <div className="infopaneContainer">
+              {this.state.restaurants.map((rest, i) => {
+                  return (
+                      <Sidebar title={this.state.title} address={this.state.address} click={this.clickThis} delete={this.deleteRestaurant} rest={this.state.restaurants} key={i}/>
+                  )
+              })}
+            </div>
           </div>
-    )
+        )
     }
 }
 

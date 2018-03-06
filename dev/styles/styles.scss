@@ -3,6 +3,7 @@
 @import 'search';
 @import 'login';
 @import 'infoWindow';
+@import 'sidebar';
 
 .wrapper {
     text-align: center;
@@ -16,9 +17,12 @@
 }   
 
 .infoPane {
+    position: absolute;
+    right:15%;
     float:right;
     max-width:400px;
     padding:50px;
+    z-index: 9999999;
     background-color: $orange;
     color: #fff;
 }

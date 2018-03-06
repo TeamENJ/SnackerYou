@@ -15,6 +15,8 @@ var config = {
     messagingSenderId: "351310641968"
 };
 firebase.initializeApp(config);
+const provider = new firebase.auth.GoogleAuthProvider();
+const auth = firebase.auth();
 
 class App extends React.Component {
     constructor(props) {
@@ -35,21 +37,33 @@ class App extends React.Component {
     signIn(e) {
         const provider = new firebase.auth.GoogleAuthProvider();
 
-        provider.setCustomParameters({
-            prompt: 'select_account'
-        })
-        firebase.auth().signInWithPopup(provider)
-            .then((user) => {
-                console.log(user);
+        auth.signInWithPopup(provider)
+        .then((result) => {
+            const user = result.user;
+            this.setState ({
+                user
             })
+        })
     }
-    signOut(e) {
-        firebase.auth().signOut();
+    signOut() {
+        auth.signOut()
+        .then(()=> {
+            this.setState({
+                user:null
+            });
+        });
     }
     handleChange(e) {
         this.setState({
             [e.target.id]: e.target.value
         })
+    }
+    componentDidMount () {
+        auth.onAuthStateChanged((user) =>{
+            if(user) {
+                this.setState({user})
+            }
+        });
     }
     getCoords(address) {
         axios
@@ -84,7 +98,6 @@ class App extends React.Component {
                                 rating: eatingPlace.restaurant.user_rating.aggregate_rating
                             };
                         });
-                        console.log(newArray);
 
                         this.setState({
                             restaurants: newArray,
@@ -108,37 +121,33 @@ class App extends React.Component {
     }
     render() {
 
-        return (
-        
-                <div>
+        return <div>
+            <div className="logo">
+              <img src="./public/images/fullLogo.png" />
+            </div>
+            <div className="signOut">
+              {this.state.user ? <button className="authButton" onClick={this.signOut}>
+                  Sign Out
+                </button> : <button className="authButton" onClick={this.signIn}>
+                  Sign in
+                </button>}
+            </div>
+            {this.state.user ? <div>
+                <div className="userStuff">
+                  <form onSubmit={this.submit} className="wrapper">
+                    <label htmlFor="userSearch">City or Address:</label>
+                    <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
+                    <input type="submit" value="Food Me!" />
+                  </form>
 
-                    <header className="header">
-                        <div className="logo">
-                            <img src="./public/images/fullLogo.png" />
-                        </div> 
-                        
-                        <div className="signOut">
-                            <button className="authButton" onClick={this.signIn}>Sign in</button>
-                        </div>
-                    
-                        <div>
-                            <button className="authButton" onClick={this.signOut}>Sign Out</button>
-                        </div>
-                        
-                    </header>
-                
-                        <form onSubmit={this.submit} className="wrapper">
-                            <label htmlFor="userSearch">City or Address:</label>
-                            <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
-                            <input type="submit" value="Food Me!" />
-                        </form>
-                    <div id="map" className="map">
-                        <MapContainer locations={this.state.restaurants} coords={this.state.coordinates} />
-                    </div>   
-                               
+                  <div id="map" className="map">
+                    <MapContainer locations={this.state.restaurants} coords={this.state.coordinates} />
+                  </div>    
                 </div>
-           
-        )
+              </div> : <div className="wrapper">
+                <p>you must be logged in</p>
+              </div>}
+          </div>;
     }
 }
 
