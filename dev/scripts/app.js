@@ -22,7 +22,8 @@ class App extends React.Component {
         this.state = {
             userText: '',
             restaurants: [],
-            coordinates: {}
+            coordinates: {},
+            loggedIn: false
         }
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
@@ -30,6 +31,7 @@ class App extends React.Component {
         this.submit = this.submit.bind(this);
         this.getCoords = this.getCoords.bind(this);
     }
+
     signIn(e) {
         const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -107,25 +109,35 @@ class App extends React.Component {
     render() {
 
         return (
-            <div>
-                <div className="logo">
-                    <img src="./public/images/fullLogo.png" />
-                </div>
-                <div className="signOut">
-                    <button className="authButton" onClick={this.signIn}>Sign in</button>
-                    <button className="authButton" onClick={this.signOut}>Sign Out</button>
-                </div>
-                <form onSubmit={this.submit} className="wrapper">
-                    <label htmlFor="userSearch">City or Address:</label>
-                    <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
-                    <input type="submit" value="Food Me!" />
-                </form>
+        
+                <div>
 
-                <div id="map" className="map">
-                    <MapContainer locations={this.state.restaurants} coords={this.state.coordinates} />
+                    <header className="header">
+                        <div className="logo">
+                            <img src="./public/images/fullLogo.png" />
+                        </div> 
+                        
+                        <div className="signOut">
+                            <button className="authButton" onClick={this.signIn}>Sign in</button>
+                        </div>
+                    
+                        <div>
+                            <button className="authButton" onClick={this.signOut}>Sign Out</button>
+                        </div>
+                        
+                    </header>
+                
+                        <form onSubmit={this.submit} className="wrapper">
+                            <label htmlFor="userSearch">City or Address:</label>
+                            <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
+                            <input type="submit" value="Food Me!" />
+                        </form>
+                    <div id="map" className="map">
+                        <MapContainer locations={this.state.restaurants} coords={this.state.coordinates} />
+                    </div>   
+                               
                 </div>
-
-            </div>
+           
         )
     }
 }

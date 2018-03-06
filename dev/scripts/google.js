@@ -12,8 +12,7 @@ export class MapContainer extends React.Component {
             rating:'',
             showingInfoWindow: false,
             selectedPlace: {},
-            activeMarker: {},
-            loggedIn: false
+            activeMarker: {}
         }
         
         this.markerClick = this.markerClick.bind(this);
@@ -39,10 +38,7 @@ export class MapContainer extends React.Component {
             activeMarker: marker,
             address: props.address,
             rating: props.rating
-
-
         })
- 
     }
     clickThis(){
         
@@ -71,7 +67,8 @@ export class MapContainer extends React.Component {
             height:'80%'
         }
         // centerAroundCurrentLocation={true} 
-        return <div>
+    return (
+        <div>
             <div className="infoPane">
               <h5>{this.state.title}</h5>
               <p>{this.state.address}</p>
@@ -106,7 +103,8 @@ export class MapContainer extends React.Component {
                 </div>
               </InfoWindow>
             </Map>
-          </div>;
+          </div>
+    )
     }
 }
 
