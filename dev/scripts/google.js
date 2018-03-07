@@ -96,36 +96,32 @@ console.log(key)
     }
     render(props) {
         const style = {
-            width:'70%',
-            height:'80%'
+            width:'100%',
+            height:'100%'
         }
-        return (<div className="rightColumn">
+        return <div className="rightColumn">
             <div className="infoPane">
-                    <button onClick={this.clickThis} className="save">Save Restaurant</button>
+              <h3>{this.props.userInfo}'s Picks</h3>
+              <button onClick={this.clickThis} className="save">
+                Save Restaurant
+              </button>
 
-                {this.state.savedRestaurants.map((restaurant) => {
-                    console.log(restaurant)
-                    return(
-<span key={restaurant.key}>
-                        <h5>{restaurant.restaurant}</h5>
-                        <p>{restaurant.address}</p>
-                        <button value={restaurant.key} onClick={() => this.deleteRestaurant(restaurant.key)}><i class="fas fa-times"></i></button>
-</span>
-                        
-                    )
-                    
-                })}
-
-
+              {this.state.savedRestaurants.map(restaurant => {
+                console.log(restaurant);
+                return <div key={restaurant.key}>
+                    <h5>{restaurant.restaurant}</h5>
+                    <p>{restaurant.address}</p>
+                    <button className="delete" value={restaurant.key} onClick={() => this.deleteRestaurant(restaurant.key)}>
+                      <i class="fas fa-times" />
+                    </button>
+                  </div>;
+              })}
             </div>
             <section className="saved">
-                <div className="wrapper">
-                
-
-                </div>
+              <div className="wrapper" />
             </section>
-            
-            <Map google={this.props.google} zoom={13} onClick={this.onMapClicked} center={this.props.coords} style={style}>
+
+            <Map google={this.props.google} centerAroundCurrentLocation={true} zoom={14} onClick={this.onMapClicked} center={this.props.coords} style={style}>
               {Object.values(this.props.locations).map(
                 (location, i) => {
                   return (
@@ -153,8 +149,7 @@ console.log(key)
                 </div>
               </InfoWindow>
             </Map>
-          </div>
-        )
+          </div>;
     }
 }
 

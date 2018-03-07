@@ -3,6 +3,15 @@
 @import 'search';
 @import 'login';
 @import 'infoWindow';
+@import 'responsive';
+
+body {
+    // overflow: hidden;
+}
+
+img {
+    display:block;
+}
 
 .wrapper {
     text-align: center;
@@ -14,22 +23,62 @@
         font-weight: 900;
     }
 }   
-
-
-
+h3 {
+    font-family: $headerFont;
+    font-size:32px;
+    font-weight: 300;
+    margin:0 0 10px 0;
+}
 .infoPane {
+    overflow: auto;
     position: absolute;
-    top: 80px;
     right:0px;
     float:right;
-    border: 1px solid black;
-    width: 400px;
-    max-width:400px;
-    padding:50px;
+    font-family: $mainFont;
+    // border: 1px solid black;
+    width: 20%;
+    // max-width:400px;
+    padding:0 50px;
+    // padding-top: 20px;
     z-index: 9999999;
+    background:$orange;
+    color:white;
+    min-height:100vh;
+    height:100%;
+    div {
+        position: relative;
+        line-height: 24px;
+        margin-top:50px;
+    }
+    p {
+        width:80%;
+    }
 }
+
 
 .rightColumn {
     position: relative;
-    height: 55vh;
+    min-height: 100vh;
+    height:100%;
+}
+
+h5 {
+    font-size: 24px;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+.delete {
+    position: absolute;
+    top:1px;
+    right: 1px;
+    border:0;
+    border-style: none;
+    color:$dark;
+    padding:5px 10px;
+    &:hover,
+    &:focus {
+        color:$orange;
+        background:$dark;
+    }
 }

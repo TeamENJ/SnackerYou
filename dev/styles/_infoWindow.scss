@@ -1,8 +1,11 @@
 h2 {
     font-family:$headerFont;
     font-size:24px;
+    font-weight: 300;
     // margin:0px;
 }
+
+
 .locationAddress {
     font-family: $mainFont;
     font-size:14px;
@@ -10,19 +13,18 @@ h2 {
     line-height:18px;
 }
 
-.save {
-    border:1px solid $grey;
-    border-radius:5px;
-    padding:10px 25px;
-}
-
 .logo {
     
-    max-width: 60%;
+    max-width: 650px;
+    width:100%;
     float: left;
     img {
         width: 100%;
     }
+}
+
+.responsiveLogo {
+    display: none;
 }
 
 
