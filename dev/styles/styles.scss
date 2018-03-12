@@ -5,10 +5,6 @@
 @import 'infoWindow';
 @import 'responsive';
 
-body {
-    // overflow: hidden;
-}
-
 img {
     display:block;
 }
@@ -28,6 +24,7 @@ h3 {
     font-size:32px;
     font-weight: 300;
     margin:0 0 10px 0;
+    text-align: center;
 }
 .infoPane {
     overflow: auto;
@@ -63,9 +60,10 @@ h3 {
 }
 
 h5 {
-    font-size: 24px;
+    font-size: 22px;
     margin-bottom: 5px;
     margin-top: 20px;
+    width: 80%;
 }
 
 .delete {
@@ -76,9 +74,15 @@ h5 {
     border-style: none;
     color:$dark;
     padding:5px 10px;
+    font-size: 10px;
     &:hover,
     &:focus {
         color:$orange;
         background:$dark;
     }
+}
+
+.save {
+    display: block;
+    margin: 0 auto;
 }
