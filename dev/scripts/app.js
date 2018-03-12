@@ -35,42 +35,28 @@ class App extends React.Component {
         this.submit = this.submit.bind(this);
         this.getCoords = this.getCoords.bind(this);
         this.getSavedRestaurants = this.getSavedRestaurants.bind(this);
-        this.getSavedRestaurants();        
-
+        this.getSavedRestaurants();
     }
 
     signIn() {
 
         auth.signInWithPopup(provider)
-        .then((result) => {
-            const user = result.user;
-            this.setState ({
-                user
+            .then((result) => {
+                const user = result.user;
+                this.getSavedRestaurants();
+                this.setState({
+                    user
+                })
+                console.log(user)
             })
-            console.log(user)
-        })
-        // const provider = new firebase.auth.GoogleAuthProvider();
-
-        // provider.setCustomParameters({
-        //     prompt: 'select_account'
-        // })
-        // firebase.auth().signInWithPopup(provider)
-        //     .then((user) => {
-        //         console.log(user);
-        //         const user = result.user;
-        //         this.setState ({
-        //             user
-        //         })
-        //     })
     }
     signOut() {
         auth.signOut()
-        .then(()=> {
-            this.setState({
-                user:null
+            .then(() => {
+                this.setState({
+                    user: null
+                });
             });
-        });
-        // firebase.auth().signOut();
     }
     handleChange(e) {
         this.setState({
@@ -82,14 +68,6 @@ class App extends React.Component {
 
         const restaurantList = [];
 
-        // dbref.on('value', (snapshot) => {
-        //     const data = snapshot.val();
-        //     const state = [];
-        //     for (let key in data) {
-        //         data[key].key = key;
-        //         state.push(data[key]);
-        //     }
-        
         dbRef.on('value', (response) => {
             const data = response.val();
             const state = [];
@@ -103,10 +81,10 @@ class App extends React.Component {
             });
         })
     }
-    componentDidMount () {
-        auth.onAuthStateChanged((user) =>{
-            if(user) {
-                this.setState({user})
+    componentDidMount() {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ user })
             }
         });
     }
@@ -140,11 +118,8 @@ class App extends React.Component {
                                 address: eatingPlace.restaurant.location.address,
                                 latitude: eatingPlace.restaurant.location.latitude,
                                 longitude: eatingPlace.restaurant.location.longitude,
-                                // rating: eatingPlace.restaurant.user_rating.aggregate_rating
                             };
                         });
-                        // console.log(newArray);
-
                         this.setState({
                             restaurants: newArray,
                             lat: data.results[0].geometry.location.lat,
@@ -164,12 +139,16 @@ class App extends React.Component {
         const coords = {};
 
         this.getCoords(inputResult);
+
+        $('html, body').animate({
+            scrollTop: $('#map').offset().top
+        });
     }
     render() {
 
         return <div>
             <div className="logo">
-              <img src="./public/images/fullLogo.png" />
+                <img src="./public/images/fullLogo.png" />
             </div>
             <div className="responsiveLogo">
               <img src="./public/images/squareLogo.png" />
@@ -187,16 +166,6 @@ class App extends React.Component {
                         </span>
                       </div>
                     </div>
-                    {/* <form onSubmit={this.submit} className="wrapper">
-                    <label htmlFor="userSearch">City or Address:</label>
-                    <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
-                    <input type="submit" value="Food Me!" />
-                  </form>
-
-                  <div id="map" className="map">
-
-                    <MapContainer locations={this.state.restaurants} coords={this.state.coordinates} />
-                  </div>     */}
                   </div>
                 </div> : <div className="wrapper" />}
               {this.state.user ? <button className="authButton logOut" onClick={this.signOut}>
@@ -208,9 +177,9 @@ class App extends React.Component {
 
             {this.state.user ? <div className="search-thing">
                 <form onSubmit={this.submit} className="wrapper">
-                  <label htmlFor="userSearch">City or Address:</label>
-                  <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
-                  <input type="submit" value="Food Me!" />
+                    <label htmlFor="userSearch">City or Address:</label>
+                    <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
+                    <input type="submit" value="Food Me!" />
                 </form>
 
                 <div id="map" className="map">

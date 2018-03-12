@@ -2,13 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 
-
 export class MapContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             title: '',
-            // rating:'',
             address: '',
             showingInfoWindow: false,
             selectedPlace: {},
@@ -16,15 +14,13 @@ export class MapContainer extends React.Component {
             loggedIn: false,
             savedRestaurants: props.userHistory
         }
-        
+
         this.markerClick = this.markerClick.bind(this);
         this.onMapClicked = this.onMapClicked.bind(this);
         this.clickThis = this.clickThis.bind(this);
         this.deleteRestaurant = this.deleteRestaurant.bind(this);
-
     }
 
- 
     componentWillReceiveProps(props) {
         // console.log(this.props.userHistory)
         console.log(props)
@@ -39,31 +35,22 @@ export class MapContainer extends React.Component {
             showingInfoWindow: true,
             title: props.title,
             activeMarker: marker,
-
-            address: props.address,
-
-           
-
-
+            address: props.address
         })
- 
-    }
-    clickThis(){
 
-        
+    }
+    clickThis() {
         const userSave = {
             restaurant: this.state.title,
             address: this.state.address,
-
-        
         }
 
         const dbRef = firebase.database().ref('/restaurants');
-        dbRef.push(userSave);     
+        dbRef.push(userSave);
     }
     componentDidMount() {
         const dbRef = firebase.database().ref('/restaurants');
-        dbRef.on('value', (snapshot)=>{
+        dbRef.on('value', (snapshot) => {
             let items = snapshot.val();
             let newState = [];
             for (let item in items) {
@@ -74,7 +61,7 @@ export class MapContainer extends React.Component {
                 });
             }
             this.setState({
-                places:newState
+                places: newState
             });
             console.log(items);
         });
@@ -90,7 +77,7 @@ export class MapContainer extends React.Component {
     }
     deleteRestaurant(key) {
         // e.preventDefault();
-console.log(key)
+        console.log(key)
         const dbRef = firebase.database().ref(`restaurants/${key}`)
         dbRef.remove();
     }
@@ -102,9 +89,11 @@ console.log(key)
         return <div className="rightColumn">
             <div className="infoPane">
               <h3>{this.props.userInfo}'s Picks</h3>
-              <button onClick={this.clickThis} className="save">
-                Save Restaurant
-              </button>
+              <div>
+                  <button onClick={this.clickThis} className="save">
+                    Save Restaurant
+                  </button>
+              </div>
 
               {this.state.savedRestaurants.map(restaurant => {
                 console.log(restaurant);
@@ -121,7 +110,7 @@ console.log(key)
               <div className="wrapper" />
             </section>
 
-            <Map google={this.props.google} centerAroundCurrentLocation={true} zoom={14} onClick={this.onMapClicked} center={this.props.coords} style={style}>
+            <Map google={this.props.google} centerAroundCurrentLocation={true} zoom={16} onClick={this.onMapClicked} center={this.props.coords} style={style}>
               {Object.values(this.props.locations).map(
                 (location, i) => {
                   return (
