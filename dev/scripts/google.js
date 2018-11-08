@@ -37,7 +37,6 @@ export class MapContainer extends React.Component {
             activeMarker: marker,
             address: props.address
         })
-
     }
     clickThis() {
         const userSave = {
@@ -86,7 +85,8 @@ export class MapContainer extends React.Component {
             width:'100%',
             height:'100%'
         }
-        return <div className="rightColumn">
+        return (
+        <div className="rightColumn">
             <div className="infoPane">
               <h3>{this.props.userInfo}'s Picks</h3>
               <div>
@@ -138,7 +138,8 @@ export class MapContainer extends React.Component {
                 </div>
               </InfoWindow>
             </Map>
-          </div>;
+          </div>
+        );  
     }
 }
 

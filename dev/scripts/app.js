@@ -39,24 +39,23 @@ class App extends React.Component {
     }
 
     signIn() {
-
         auth.signInWithPopup(provider)
-            .then((result) => {
-                const user = result.user;
-                this.getSavedRestaurants();
-                this.setState({
-                    user
-                })
-                console.log(user)
+        .then((result) => {
+            const user = result.user;
+            this.getSavedRestaurants();
+            this.setState({
+                user
             })
+            console.log(user)
+        })
     }
     signOut() {
         auth.signOut()
-            .then(() => {
-                this.setState({
-                    user: null
-                });
+        .then(() => {
+            this.setState({
+                user: null
             });
+        });
     }
     handleChange(e) {
         this.setState({
@@ -145,8 +144,8 @@ class App extends React.Component {
         });
     }
     render() {
-
-        return <div>
+        return (
+        <div>
             <div className="logo">
                 <img src="./public/images/fullLogo.png" />
             </div>
@@ -188,7 +187,8 @@ class App extends React.Component {
               </div> : <div>
                 
               </div>}
-          </div>;
+          </div>
+        );
     }
 }
 
