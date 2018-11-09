@@ -30,6 +30,7 @@ export class MapContainer extends React.Component {
             savedRestaurants: restaurantHistory
         })
     }
+
     markerClick(props, marker) {
         console.log(props);
         this.setState({
@@ -50,6 +51,7 @@ export class MapContainer extends React.Component {
         let userSave = {
             restaurant: this.state.title,
             address: this.state.address,
+            details: this.state.details
         }
 
         const dbRef = firebase.database().ref('/restaurants');
@@ -69,15 +71,15 @@ export class MapContainer extends React.Component {
             let newState = [];
             for (let item in items) {
                 newState.push({
-                    id: item,
-                    title: items[item].title,
-                    address: items[item].address
+                  id: item,
+                  title: items[item].title,
+                  address: items[item].address,
+                  details: items[item].details
                 });
             }
             this.setState({
                 places: newState
             });
-            console.log(items);
         });
     }
 
@@ -112,10 +114,11 @@ export class MapContainer extends React.Component {
               </div>
 
               {this.state.savedRestaurants.map(restaurant => {
-                  console.log(restaurant);
+                console.log(restaurant);
                 return <div key={restaurant.key}>
                     <h5>{restaurant.restaurant}</h5>
                     <p>{restaurant.address}</p>
+                    <a href={restaurant.details} target="_blank">Details</a>
                     <button className="delete" value={restaurant.key} onClick={() => this.deleteRestaurant(restaurant.key)}>
                       <i class="fas fa-times" />
                     </button>
