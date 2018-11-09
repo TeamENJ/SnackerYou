@@ -32,3 +32,10 @@ input[type="submit"], .save {
     padding: 10px 0 10px 15px;
     margin:25px;
 }
+
+.formFlex {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

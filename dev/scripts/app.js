@@ -155,7 +155,7 @@ class App extends React.Component {
         <div className="container">
             <div className="fullBleed">
                 <div className="logo">
-                    <img src="./public/images/fullLogo.png" />
+                    <img className="wordedLogo" src="./public/images/fullLogo.png" />
                     <div className="responsiveLogo">
                         <img src="./public/images/squareLogo.png" />
                     </div>
@@ -178,7 +178,7 @@ class App extends React.Component {
                         <button className="authButton logOut" onClick={this.signOut}>
                             Sign Out
                         </button>
-                        </div> : <div>
+                        </div> : <div className="buttonContainer">
                         <button className="authButton logIn" onClick={this.signIn}>
                             Sign in
                         </button>
@@ -188,8 +188,8 @@ class App extends React.Component {
             </div>
             <div className="background" />
             {this.state.user ? <div className="search-thing">
-                <form onSubmit={this.submit} className="wrapper">
-                  <label htmlFor="userSearch">City or Address:</label>
+                <form onSubmit={this.submit} className="formFlex wrapper">
+                  <label htmlFor="userSearch" className="searchLabel">City or Address:</label>
                   <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
                   <input type="submit" value="Food Me!" />
                 </form>

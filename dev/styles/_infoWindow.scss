@@ -28,4 +28,22 @@ h2 {
     display: none;
 }
 
-
+.results {
+   a {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 15px;
+        background-color: $orange;
+        color: white;
+        border:3px solid $grey;
+        font-weight: 700;
+        font-family: $mainFont;
+        text-transform: uppercase;
+        padding: 10px 20px;
+        &:hover {
+            background:$rose;
+            color:$orange;
+        }
+    }
+}
