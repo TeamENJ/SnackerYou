@@ -110,14 +110,15 @@ class App extends React.Component {
                         }
                     }).then((response) => {
                         let newArray = Array.from(this.state.restaurants);
-
+                        
                         newArray = response.data.restaurants.map(eatingPlace => {
-
+                        
                             return {
                                 name: eatingPlace.restaurant.name,
                                 address: eatingPlace.restaurant.location.address,
                                 latitude: eatingPlace.restaurant.location.latitude,
                                 longitude: eatingPlace.restaurant.location.longitude,
+                                url: eatingPlace.restaurant.url
                             };
                         });
                         this.setState({

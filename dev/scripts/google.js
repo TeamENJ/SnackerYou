@@ -8,6 +8,7 @@ export class MapContainer extends React.Component {
         this.state = {
             title: '',
             address: '',
+            details: '',
             showingInfoWindow: false,
             selectedPlace: {},
             activeMarker: {},
@@ -23,18 +24,20 @@ export class MapContainer extends React.Component {
 
     componentWillReceiveProps(props) {
         // console.log(this.props.userHistory)
-        console.log(props)
+        console.log(this.props.locations)
         let restaurantHistory = props.userHistory
         this.setState({
             savedRestaurants: restaurantHistory
         })
     }
     markerClick(props, marker) {
+        console.log(props);
         this.setState({
             showingInfoWindow: true,
             title: props.title,
             activeMarker: marker,
-            address: props.address
+            address: props.address,
+            details: props.details
         })
     }
     clickThis(key) {
@@ -109,7 +112,7 @@ export class MapContainer extends React.Component {
               </div>
 
               {this.state.savedRestaurants.map(restaurant => {
-                console.log(restaurant);
+                  console.log(restaurant);
                 return <div key={restaurant.key}>
                     <h5>{restaurant.restaurant}</h5>
                     <p>{restaurant.address}</p>
@@ -123,9 +126,10 @@ export class MapContainer extends React.Component {
               <div className="wrapper" />
             </section>
 
-            <Map google={this.props.google} centerAroundCurrentLocation={true} zoom={16} onClick={this.onMapClicked} center={this.props.coords} style={style}>
+            <Map google={this.props.google} centerAroundCurrentLocation={true} zoom={16} onClick={this.onMapClicked} center={this.props.coords} style={style} location={this.props.locations}>
               {Object.values(this.props.locations).map(
                 (location, i) => {
+                console.log(location);
                   return (
                     <Marker
                       name={"Toronto"}
@@ -138,6 +142,7 @@ export class MapContainer extends React.Component {
                       onClick={this.markerClick}
                       name={"Current location"}
                       key={i}
+                      details={location.url}
                     />
                   );
                 }
@@ -148,6 +153,7 @@ export class MapContainer extends React.Component {
                   <p className="locationAddress">
                     {this.state.address}
                   </p>
+                  <a href={this.state.details} target="_blank">Details</a>
                 </div>
               </InfoWindow>
             </Map>
