@@ -24,7 +24,7 @@ body {
 .wrapper {
     text-align: center;
     width: 100%;
-    background-color: $orange;
+    background-color: $orangeAlpha;
     label {
         color: white;
         font-size: 1.2rem;
@@ -57,7 +57,7 @@ h3 {
     padding:0 50px;
     // padding-top: 20px;
     z-index: 9999999;
-    background:$orange;
+    background: $orangeAlpha;
     color:white;
     min-height:100vh;
     height:100%;

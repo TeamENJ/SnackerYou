@@ -137,6 +137,11 @@ class App extends React.Component {
         const inputResult = this.state.userText;
         const coords = {};
 
+        if(inputResult === '') {
+            alert('Please enter a location or address');
+            return;
+        }
+
         this.getCoords(inputResult);
 
         $('html, body').animate({

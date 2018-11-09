@@ -30,22 +30,37 @@ export class MapContainer extends React.Component {
         })
     }
     markerClick(props, marker) {
-
         this.setState({
             showingInfoWindow: true,
             title: props.title,
             activeMarker: marker,
             address: props.address
         })
+        if(marker === null) {
+            alert('please select restaurant');
+        }
     }
     clickThis() {
-        const userSave = {
+
+        if( this.state.address === '' || this.state.title === '') {
+            alert('Please select a location');
+            return;
+        }
+        
+        let userSave = {
             restaurant: this.state.title,
             address: this.state.address,
         }
 
         const dbRef = firebase.database().ref('/restaurants');
         dbRef.push(userSave);
+
+        this.setState({
+            restaurant: '',
+            address: ''
+        });
+
+        this.onMapClicked();
     }
     componentDidMount() {
         const dbRef = firebase.database().ref('/restaurants');
@@ -69,9 +84,9 @@ export class MapContainer extends React.Component {
     onMapClicked(props) {
         if (this.state.showingInfoWindow) {
             this.setState({
-                showingInfoWindow: false,
-                activeMarker: null,
-            })
+              showingInfoWindow: false,
+              activeMarker: null,
+            });
         }
     }
     deleteRestaurant(key) {
@@ -129,7 +144,7 @@ export class MapContainer extends React.Component {
                   );
                 }
               )}
-              <InfoWindow marker={this.state.activeMarker} onClose={this.onInfoWindowClose} visible={this.state.showingInfoWindow}>
+              <InfoWindow marker={this.state.activeMarker} onClose={this.onMapClicked} visible={this.state.showingInfoWindow}>
                 <div className="results">
                   <h2>{this.state.title}</h2>
                   <p className="locationAddress">
