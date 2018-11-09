@@ -145,49 +145,54 @@ class App extends React.Component {
     }
     render() {
         return (
-        <div>
-            <div className="logo">
-                <img src="./public/images/fullLogo.png" />
-            </div>
-            <div className="responsiveLogo">
-              <img src="./public/images/squareLogo.png" />
-            </div>
-            <div className="signOut">
-              {this.state.user ? <div className="clearfix">
-                  <div className="userStuff clearfix">
-                    <div className="userPhoto">
-                      <div>
-                        <img src={this.state.user.photoURL} alt="" />
-                      </div>
-                      <div className="welcome">
-                        <span>
-                          Welcome, {this.state.user.displayName}!
-                        </span>
-                      </div>
+        <div className="container">
+            <div className="fullBleed">
+                <div className="logo">
+                    <img src="./public/images/fullLogo.png" />
+                    <div className="responsiveLogo">
+                        <img src="./public/images/squareLogo.png" />
                     </div>
-                  </div>
-                </div> : <div className="wrapper" />}
-              {this.state.user ? <button className="authButton logOut" onClick={this.signOut}>
-                  Sign Out
-                </button> : <button className="authButton logIn" onClick={this.signIn}>
-                  Sign in
-                </button>}
+                    <div className="signOut">
+                    {this.state.user ? <div className="clearfix">
+                        <div className="userStuff clearfix">
+                            <div className="userPhoto">
+                            <div>
+                                <img src={this.state.user.photoURL} alt="" />
+                            </div>
+                            <div className="welcome">
+                                <span>
+                                Welcome, {this.state.user.displayName}!
+                                </span>
+                            </div>
+                            </div>
+                        </div>
+                        </div> : <div />}
+                    {this.state.user ? <div className="buttonContainer">
+                        <button className="authButton logOut" onClick={this.signOut}>
+                            Sign Out
+                        </button>
+                        </div> : <div>
+                        <button className="authButton logIn" onClick={this.signIn}>
+                            Sign in
+                        </button>
+                        </div>}
+                    </div>
+                </div>
             </div>
 
             {this.state.user ? <div className="search-thing">
                 <form onSubmit={this.submit} className="wrapper">
-                    <label htmlFor="userSearch">City or Address:</label>
-                    <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
-                    <input type="submit" value="Food Me!" />
+                  <label htmlFor="userSearch">City or Address:</label>
+                  <input type="text" id="userText" value={this.state.userText} onChange={this.handleChange} />
+                  <input type="submit" value="Food Me!" />
                 </form>
 
                 <div id="map" className="map">
                   <MapContainer locations={this.state.restaurants} coords={this.state.coordinates} userHistory={this.state.savedRestaurants} userInfo={this.state.user.displayName} />
                 </div>
-              </div> : <div>
-                
-              </div>}
-          </div>
+              </div> : <div />}
+            <div className="background" />
+        </div>
         );
     }
 }
