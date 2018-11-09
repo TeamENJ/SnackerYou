@@ -36,11 +36,8 @@ export class MapContainer extends React.Component {
             activeMarker: marker,
             address: props.address
         })
-        if(marker === null) {
-            alert('please select restaurant');
-        }
     }
-    clickThis() {
+    clickThis(key) {
 
         if( this.state.address === '' || this.state.title === '') {
             alert('Please select a location');
@@ -86,6 +83,7 @@ export class MapContainer extends React.Component {
             this.setState({
               showingInfoWindow: false,
               activeMarker: null,
+              title: ''
             });
         }
     }

@@ -53,7 +53,8 @@ class App extends React.Component {
         auth.signOut()
         .then(() => {
             this.setState({
-                user: null
+                user: null,
+                userText: ''
             });
         });
     }
@@ -184,7 +185,7 @@ class App extends React.Component {
                     </div>
                 </div>
             </div>
-
+            <div className="background" />
             {this.state.user ? <div className="search-thing">
                 <form onSubmit={this.submit} className="wrapper">
                   <label htmlFor="userSearch">City or Address:</label>
@@ -196,7 +197,6 @@ class App extends React.Component {
                   <MapContainer locations={this.state.restaurants} coords={this.state.coordinates} userHistory={this.state.savedRestaurants} userInfo={this.state.user.displayName} />
                 </div>
               </div> : <div />}
-            <div className="background" />
         </div>
         );
     }

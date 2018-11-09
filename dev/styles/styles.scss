@@ -14,11 +14,15 @@ html, body {
 }
 
 body {
-    background: red;
+    background: $orangeAlpha;
+    background-image: url('../../public/images/restaurant.jpg');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
 }
 
 .fullBleed {
-    background: $orangeAlpha;
+    background: $orangeAlphaHeader;
 }
 
 .wrapper {
