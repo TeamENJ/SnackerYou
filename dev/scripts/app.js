@@ -155,9 +155,9 @@ class App extends React.Component {
         <div className="container">
             <div className="fullBleed">
                 <div className="logo">
-                    <img className="wordedLogo" src="./public/images/fullLogo.png" />
+                    <img className="wordedLogo" src="../../public/images/fullLogo.png" />
                     <div className="responsiveLogo">
-                        <img src="./public/images/squareLogo.png" />
+                        <img src="../../public/images/squareLogo.png" />
                     </div>
                     <div className="signOut">
                     {this.state.user ? <div className="clearfix">
