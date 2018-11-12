@@ -9,21 +9,44 @@ img {
     display:block;
 }
 
+html, body {
+    height: 100%;
+}
+
+body {
+    background: $orangeAlpha;
+    background-image: url('../../public/images/restaurant.jpg');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
+}
+
+.fullBleed {
+    background: $orangeAlphaHeader;
+}
+
 .wrapper {
     text-align: center;
     width: 100%;
-    background-color: $orange;
+    background-color: $orangeAlpha;
     label {
         color: white;
         font-size: 1.2rem;
         font-weight: 900;
     }
-}   
+}  
+
+.wrapper2 {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
 h3 {
     font-family: $headerFont;
     font-size:32px;
     font-weight: 300;
     margin:0 0 10px 0;
+    margin-top: 20px;
     text-align: center;
 }
 .infoPane {
@@ -33,25 +56,42 @@ h3 {
     float:right;
     font-family: $mainFont;
     // border: 1px solid black;
-    width: 20%;
+    width: 25%;
     // max-width:400px;
     padding:0 50px;
     // padding-top: 20px;
     z-index: 9999999;
-    background:$orange;
+    background: $orangeAlpha;
     color:white;
     min-height:100vh;
     height:100%;
     div {
         position: relative;
         line-height: 24px;
-        margin-top:50px;
+        margin: 40px 0;
+    }
+    a {
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 15px;
+        background-color: $orange;
+        color: white;
+        border:3px solid $grey;
+        font-weight: 700;
+        font-family: $mainFont;
+        text-transform: uppercase;
+        padding: 10px 20px;
+        &:hover {
+            background:$rose;
+            color:$orange;
+    }
     }
     p {
         width:80%;
     }
 }
-
 
 .rightColumn {
     position: relative;
@@ -64,6 +104,7 @@ h5 {
     margin-bottom: 5px;
     margin-top: 20px;
     width: 80%;
+    line-height: 1.5;
 }
 
 .delete {

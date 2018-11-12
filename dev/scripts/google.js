@@ -8,6 +8,7 @@ export class MapContainer extends React.Component {
         this.state = {
             title: '',
             address: '',
+            details: '',
             showingInfoWindow: false,
             selectedPlace: {},
             activeMarker: {},
@@ -23,30 +24,45 @@ export class MapContainer extends React.Component {
 
     componentWillReceiveProps(props) {
         // console.log(this.props.userHistory)
-        console.log(props)
+        console.log(this.props.locations)
         let restaurantHistory = props.userHistory
         this.setState({
             savedRestaurants: restaurantHistory
         })
     }
-    markerClick(props, marker) {
 
+    markerClick(props, marker) {
+        console.log(props);
         this.setState({
             showingInfoWindow: true,
             title: props.title,
             activeMarker: marker,
-            address: props.address
+            address: props.address,
+            details: props.details
         })
-
     }
-    clickThis() {
-        const userSave = {
+    clickThis(key) {
+
+        if( this.state.address === '' || this.state.title === '') {
+            alert('Please select a location');
+            return;
+        }
+        
+        let userSave = {
             restaurant: this.state.title,
             address: this.state.address,
+            details: this.state.details
         }
 
         const dbRef = firebase.database().ref('/restaurants');
         dbRef.push(userSave);
+
+        this.setState({
+            restaurant: '',
+            address: ''
+        });
+
+        this.onMapClicked();
     }
     componentDidMount() {
         const dbRef = firebase.database().ref('/restaurants');
@@ -55,24 +71,25 @@ export class MapContainer extends React.Component {
             let newState = [];
             for (let item in items) {
                 newState.push({
-                    id: item,
-                    title: items[item].title,
-                    address: items[item].address
+                  id: item,
+                  title: items[item].title,
+                  address: items[item].address,
+                  details: items[item].details
                 });
             }
             this.setState({
                 places: newState
             });
-            console.log(items);
         });
     }
 
     onMapClicked(props) {
         if (this.state.showingInfoWindow) {
             this.setState({
-                showingInfoWindow: false,
-                activeMarker: null,
-            })
+              showingInfoWindow: false,
+              activeMarker: null,
+              title: ''
+            });
         }
     }
     deleteRestaurant(key) {
@@ -86,7 +103,8 @@ export class MapContainer extends React.Component {
             width:'100%',
             height:'100%'
         }
-        return <div className="rightColumn">
+        return (
+        <div className="rightColumn">
             <div className="infoPane">
               <h3>{this.props.userInfo}'s Picks</h3>
               <div>
@@ -100,6 +118,7 @@ export class MapContainer extends React.Component {
                 return <div key={restaurant.key}>
                     <h5>{restaurant.restaurant}</h5>
                     <p>{restaurant.address}</p>
+                    <a href={restaurant.details} target="_blank">Details</a>
                     <button className="delete" value={restaurant.key} onClick={() => this.deleteRestaurant(restaurant.key)}>
                       <i class="fas fa-times" />
                     </button>
@@ -110,9 +129,10 @@ export class MapContainer extends React.Component {
               <div className="wrapper" />
             </section>
 
-            <Map google={this.props.google} centerAroundCurrentLocation={true} zoom={16} onClick={this.onMapClicked} center={this.props.coords} style={style}>
+            <Map google={this.props.google} centerAroundCurrentLocation={true} zoom={16} onClick={this.onMapClicked} center={this.props.coords} style={style} location={this.props.locations}>
               {Object.values(this.props.locations).map(
                 (location, i) => {
+                console.log(location);
                   return (
                     <Marker
                       name={"Toronto"}
@@ -125,20 +145,23 @@ export class MapContainer extends React.Component {
                       onClick={this.markerClick}
                       name={"Current location"}
                       key={i}
+                      details={location.url}
                     />
                   );
                 }
               )}
-              <InfoWindow marker={this.state.activeMarker} onClose={this.onInfoWindowClose} visible={this.state.showingInfoWindow}>
+              <InfoWindow marker={this.state.activeMarker} onClose={this.onMapClicked} visible={this.state.showingInfoWindow}>
                 <div className="results">
                   <h2>{this.state.title}</h2>
                   <p className="locationAddress">
                     {this.state.address}
                   </p>
+                  <a href={this.state.details} target="_blank">Details</a>
                 </div>
               </InfoWindow>
             </Map>
-          </div>;
+          </div>
+        );  
     }
 }
 
